@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/vehicle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <title>Vehicles</title>
+</head>
+
+<body onload="getVehicleData()">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark bg-body-tertiary p-3" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">GoCab</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-5 gap-4 fs-5">
+                    <li class="nav-item"><a class="nav-link" aria-current="page" href="../index.html">Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./vehicle.html">Vehicle</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./cabFare.html">Cab Fare</a></li>
+                </ul>
+                <!-- <a href="" class="btn btn-info">Login</a>
+                <a href="" class="btn btn-danger">Logout</a> -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid d-flex justify-content-center gap-3">
+        <!-- Modal to add Vehicle data to db -->
+        <div class="card p-2 mt-4 col-2" style="height: -webkit-fill-available;">
+            <div class="card-body">
+                <div class="text-center fw-bolder">
+                    <h2>Add Vehicle</h2>
+                </div>
+                <hr />
+                <form id="addVehicleForm">
+                    <div class="mb-4">
+                        <label for="vName" class="mb-1">Vehicle Name:</label>
+                        <input type="text" id="vName" name="vName" class="form-control" placeholder="Enter Vehicle Name"
+                            required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vNumber" class="mb-1">Vehicle Number:</label>
+                        <input type="text" id="vNumber" name="vNumber" class="form-control"
+                            placeholder="Enter Vehicle Number" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vDriverName" class="mb-1">Driver Name:</label>
+                        <input type="text" id="vDriverName" name="vDriverName" class="form-control"
+                            placeholder="Enter Driver Name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="vPhone" class="mb-1">Driver Phone:</label>
+                        <input type="number" id="vPhone" name="vPhone" class="form-control"
+                            placeholder="Enter Driver Phone" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="totalSeats" class="mb-1">Total Seats:</label>
+                        <input type="number" id="totalSeats" name="totalSeats" class="form-control"
+                            placeholder="Enter total seats" required>
+                    </div>
+                    <div class="d-flex gap-3 modal-footer">
+                        <input type="submit" value="Add Vehicle" class="btn btn-success" />
+                        <input type="reset" value="Reset" class="btn btn-danger" />
+                    </div>
+                </form>
+                <span class="text-success d-flex justify-content-center fs-6 fw-bolder mt-2" id="addVehicleMsg"><span>
+            </div>
+        </div>
+
+        <!-- Vehicles container -->
+        <div class="container row d-flex gap-4 justify-content-between">
+            <div class=" flex-fill mt-4 card p-0">
+                <div class="card-header fw-bolder d-flex justify-content-between fs-4 fw-bolder">
+                    All Vehicles
+                    <span class="text-success fs-5 fw-bolder" id="deleteVehicleMsg"></span>
+                </div>
+                <div class="card-body">
+                    <div class="container mt-3 main">
+                        <div class="card">
+                            <hr class="m-0" />
+                            <div class="card-body p-0">
+                                <table class="table table-hover text-center m-0 tb">
+                                    <thead class="p-4">
+                                        <tr>
+                                            <th>Vehicle Name</th>
+                                            <th>Vehicle Number</th>
+                                            <th>Driver Name</th>
+                                            <th>Total Seats</th>
+                                            <th>Driver Phone</th>
+                                            <th>Operations</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="vehicleTable">
+
+                                    </tbody>
+                                </table>
+
+                                <!-- Modal to edit the vehicle values -->
+                                <div class="modal fade" id="editVehicleModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content addModal">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Vehicle</h1>
+                                                <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="editForm">
+                                                    <input type="hidden" id="vId" name="vId">
+                                                    <div class="mb-4">
+                                                        <label for="vName" class="mb-1">Vehicle Name:</label>
+                                                        <input type="text" id="vName" name="vName" class="form-control"
+                                                            placeholder="Enter Vehicle Name" required>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="vNumber" class="mb-1">Vehicle Number:</label>
+                                                        <input type="text" id="vNumber" name="vNumber"
+                                                            class="form-control" placeholder="Enter Vehicle Number"
+                                                            required>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="vDriverName" class="mb-1">Driver Name:</label>
+                                                        <input type="text" id="vDriverName" name="vDriverName"
+                                                            class="form-control" placeholder="Enter Driver Name"
+                                                            required>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="vPhone" class="mb-1">Driver Phone:</label>
+                                                        <input type="number" id="vPhone" name="vPhone"
+                                                            class="form-control" placeholder="Enter Driver Phone"
+                                                            required>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="totalSeats" class="mb-1">Total Seats:</label>
+                                                        <input type="number" id="totalSeats" name="totalSeats"
+                                                            class="form-control" placeholder="Enter total seats"
+                                                            required>
+                                                    </div>
+                                                    <div class="d-flex gap-3 modal-footer">
+                                                        <input type="submit" value="Edit Vehicle"
+                                                            class="btn btn-success" />
+                                                        <input type="reset" value="Reset" class="btn btn-danger" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/vehicle.js"></script>
+</body>
+
+</html>
