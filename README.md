@@ -1,7 +1,7 @@
 GoCab – Travel App
 ## Requirements
 Java                       :    17.0.10
-OS                          :      win32 x64
+OS                         :      win32 x64
 IDE (eclipse and vs-code or other) 
 
 ## To install this project in your pc
